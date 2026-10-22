@@ -107,4 +107,13 @@ public class InscripcionService {
         }
         rInscripcion.deleteById(id);
     }
+
+    @Transactional
+    public InscripcionModel cancelarInscripcion(Long id) {
+        InscripcionModel inscripcion = rInscripcion.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la inscripción con el ID " + id));
+
+        inscripcion.setActivo(false);
+        return rInscripcion.save(inscripcion);
+    }
 }
