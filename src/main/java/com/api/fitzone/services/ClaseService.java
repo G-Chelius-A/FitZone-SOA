@@ -1,5 +1,7 @@
 package com.api.fitzone.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class ClaseService {
         ClaseModel claseExistente = rClase.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la clase con id: " + id));
 
-        if (claseDetalles.getCupo() != null && claseDetalles.getCupo()<=20) {
+        if (claseDetalles.getCupo() != null && claseDetalles.getCupo()<=20 && claseDetalles.getCupo()>0) {
             claseExistente.setCupo(claseDetalles.getCupo());
         }
         if (claseDetalles.getInstructor() != null) {
@@ -45,10 +47,10 @@ public class ClaseService {
         if (claseDetalles.getTipo() != null) {
             claseExistente.setTipo(claseDetalles.getTipo());
         }
-        if (claseDetalles.getInicio() != null) {
+        if (claseDetalles.getInicio() != null && claseDetalles.getInicio().isBefore(claseDetalles.getFin())) {
             claseExistente.setInicio(claseDetalles.getInicio());
         }
-        if (claseDetalles.getFin() != null) {
+        if (claseDetalles.getFin() != null && claseDetalles.getFin().isAfter(claseDetalles.getInicio())) {
             claseExistente.setFin(claseDetalles.getFin());
         }
         if (claseDetalles.getDia() != null) {
@@ -67,5 +69,24 @@ public class ClaseService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la clase con id: " + id);
         }
         rClase.deleteById(id);
+    }
+
+    public LocalDateTime calcularRecordatorio(ClaseModel clase) {
+
+        LocalDateTime ahora = LocalDateTime.now();
+
+        LocalDate fecha = LocalDate.now()
+            .with(java.time.temporal.TemporalAdjusters
+                .nextOrSame(clase.getDia()));
+
+        LocalDateTime fechaClase =
+            fecha.atTime(clase.getInicio());
+
+        if (!fechaClase.minusHours(2).isAfter(ahora)) {
+            fecha = fecha.plusWeeks(1);
+            fechaClase = fecha.atTime(clase.getInicio());
+        }
+
+        return fechaClase.minusHours(2);
     }
 }

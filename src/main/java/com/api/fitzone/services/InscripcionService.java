@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.api.fitzone.models.InscripcionModel;
+import com.api.fitzone.models.InscritoEvent;
 import com.api.fitzone.repositories.IInscripcionRepository;
 
 import jakarta.transaction.Transactional;
@@ -23,6 +25,9 @@ public class InscripcionService {
 
     @Autowired 
     ValidaCupoService sCupo;
+
+    @Autowired 
+    ApplicationEventPublisher eventPublisher;
 
     public ArrayList<InscripcionModel> obtenerInscripciones(){
         return (ArrayList<InscripcionModel>) rInscripcion.findAll();
@@ -48,6 +53,8 @@ public class InscripcionService {
 
         inscripcion.setActivo(true);
         InscripcionModel guardado = rInscripcion.save(inscripcion);
+
+        eventPublisher.publishEvent(new InscritoEvent(guardado.getId(), guardado.getSocio().getId(), guardado.getClase().getId(), guardado.getFechaInscripcion(), guardado.getSocio().getEmail()));
 
         return guardado;
     }
