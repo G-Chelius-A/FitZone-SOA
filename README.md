@@ -302,8 +302,8 @@ Prefijo base: `http://localhost:6767`
   "sucursal": {
     "id": 1,
     "direccion": "Av. Reforma 123",
-    "ciudad": "Puebla",
-    "estado": "Puebla"
+    "ciudad": "Veracruz",
+    "estado": "Veracruz"
   }
 }
 ```
