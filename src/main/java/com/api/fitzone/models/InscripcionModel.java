@@ -25,45 +25,49 @@ import jakarta.validation.constraints.NotNull;
  * Inscripcion
  */
 @Entity
-@Table(name="inscripciones")
+@Table(name = "inscripciones")
 public class InscripcionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_inscripcion")
+    @Column(name = "id_inscripcion")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_socio", nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_socio", nullable = false)
     @JsonIgnoreProperties("inscripciones")
-    @NotNull(message="Debe indicarse un socio")
+    @NotNull(message = "Debe indicarse un socio")
     private SocioModel socio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_clase", nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_clase", nullable = false)
     @JsonIgnoreProperties("inscripciones")
-    @NotNull(message="Debe indicarse una clase")
+    @NotNull(message = "Debe indicarse una clase")
     private ClaseModel clase;
 
-    @Column(name="fecha_inscripcion", nullable=false, updatable=false)
-    @NotNull(message="Debe indicarse una fecha de inscripción")
+    @Column(name = "fecha_inscripcion", nullable = false, updatable = false)
+    @NotNull(message = "Debe indicarse una fecha de inscripción")
     private LocalDateTime fechaInscripcion;
 
-    @Column(name="activo", nullable=false)
+    @Column(name = "activo", nullable = false)
     private Boolean activo;
 
-    @Column(name="notas")
+    @Column(name = "notas")
     private String notas;
 
-    @JsonIgnore 
-    @OneToMany(mappedBy="inscripcion", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "inscripcion", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("inscripcion")
     private List<RecordatorioModel> recordatorios = new ArrayList<>();
 
+    // Al crear una inscripción, se coloca la fecha y hora actual. También se
+    // considera activa.
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         this.fechaInscripcion = LocalDateTime.now();
-        this.activo=true;
+        this.activo = true;
     }
+
+    // Geters, setters y constructores.
 
     public Long getId() {
         return id;

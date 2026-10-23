@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.fitzone.models.ClaseModel;
 import com.api.fitzone.services.ClaseService;
 
+/*
+    RestController de las clases
+*/
+
 @RestController
 @RequestMapping("/api/clases")
 public class ClaseController {
@@ -38,7 +42,7 @@ public class ClaseController {
 
     @PostMapping
     public ResponseEntity<ClaseModel> guardarClase(@RequestBody ClaseModel clase) {
-        ClaseModel nuevaClase = claseService.guardarClase(clase);
+        ClaseModel nuevaClase = claseService.inscribirEnClase(clase);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaClase);
     }
 

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.api.fitzone.models.InscripcionModel;
 
-@Repository 
-public interface IInscripcionRepository extends JpaRepository<InscripcionModel, Long>{
-    long countByClase_IdClaseAndActivoTrue(Long idClase);
+@Repository
+public interface IInscripcionRepository extends JpaRepository<InscripcionModel, Long> {
+    // Contar cuántos inscripciones activas hay por clase.
+    long countByClase_IdAndActivoTrue(Long idClase);
+
     List<InscripcionModel> findByActivoTrue();
 }

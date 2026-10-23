@@ -21,7 +21,7 @@ public class ValidaCupoService {
         ClaseModel clase = rClase.findById(idClase)
             .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado clase con el ID: "+idClase));
     
-        Long inscritos = rInscripcion.countByClase_IdClaseAndActivoTrue(idClase);
+        Long inscritos = rInscripcion.countByClase_IdAndActivoTrue(idClase);
 
         if(inscritos >= clase.getCupo()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "La clase ya no tiene cupos disponibles");

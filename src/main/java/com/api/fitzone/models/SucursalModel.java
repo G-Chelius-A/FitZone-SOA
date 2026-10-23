@@ -17,23 +17,25 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="sucursales")
+@Table(name = "sucursales")
 public class SucursalModel {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_sucursal", nullable=false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_sucursal", nullable = false)
     public Long id;
-    @Column(name="direccion", nullable=false)
+    @Column(name = "direccion", nullable = false)
     public String direccion;
-    @Column(name="ciudad", nullable=false)
+    @Column(name = "ciudad", nullable = false)
     public String ciudad;
-    @Column(name="estado", nullable=false)
+    @Column(name = "estado", nullable = false)
     public String estado;
 
-    @JsonIgnore 
-    @OneToMany(mappedBy="sucursal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "sucursal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("sucursal")
     public List<ClaseModel> clases = new ArrayList<>();
+
+    // Getters, setters y constructores.
 
     public Long getId() {
         return id;

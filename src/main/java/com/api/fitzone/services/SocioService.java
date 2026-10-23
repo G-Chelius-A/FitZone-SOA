@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.api.fitzone.models.SocioModel;
 import com.api.fitzone.repositories.ISocioRepository;
 
+//Servicio para operaciones CRUD y consultas de socios.
 @Service
 public class SocioService {
 
@@ -29,7 +30,8 @@ public class SocioService {
     @Transactional
     public SocioModel guardarSocio(SocioModel socio) {
         if (socio.getEmail() != null && rSocio.existsByEmail(socio.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe un socio registrado con el correo: " + socio.getEmail());
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Ya existe un socio registrado con el correo: " + socio.getEmail());
         }
         return rSocio.save(socio);
     }
@@ -37,12 +39,14 @@ public class SocioService {
     @Transactional
     public SocioModel actualizarSocio(Long id, SocioModel socioDetalles) {
         SocioModel socioExistente = rSocio.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado el socio con id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se ha encontrado el socio con id: " + id));
 
-        if (socioDetalles.getEmail() != null 
+        if (socioDetalles.getEmail() != null
                 && !socioDetalles.getEmail().equalsIgnoreCase(socioExistente.getEmail())
                 && rSocio.existsByEmail(socioDetalles.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe un socio registrado con el correo: " + socioDetalles.getEmail());
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Ya existe un socio registrado con el correo: " + socioDetalles.getEmail());
         }
 
         if (socioDetalles.getNombre() != null) {

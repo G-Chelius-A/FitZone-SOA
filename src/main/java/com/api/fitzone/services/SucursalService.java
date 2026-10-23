@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.api.fitzone.models.SucursalModel;
 import com.api.fitzone.repositories.ISucursalRepository;
 
+// Servicio de Entidad para operaciones CRUD de Entidad
 @Service
 public class SucursalService {
 
@@ -34,7 +35,8 @@ public class SucursalService {
     @Transactional
     public SucursalModel actualizarSucursal(Long id, SucursalModel sucursalDetalles) {
         SucursalModel sucursalExistente = rSucursal.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la sucursal con id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se ha encontrado la sucursal con id: " + id));
 
         if (sucursalDetalles.getDireccion() != null) {
             sucursalExistente.setDireccion(sucursalDetalles.getDireccion());

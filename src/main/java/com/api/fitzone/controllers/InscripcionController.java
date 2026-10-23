@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.fitzone.models.InscripcionModel;
 import com.api.fitzone.services.InscripcionService;
 
+/*
+    RestController de las inscripciones
+*/
 @RestController
 @RequestMapping("/api/inscripciones")
 public class InscripcionController {
@@ -44,7 +47,8 @@ public class InscripcionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InscripcionModel> actualizarInscripcion(@PathVariable Long id, @RequestBody InscripcionModel inscripcion) {
+    public ResponseEntity<InscripcionModel> actualizarInscripcion(@PathVariable Long id,
+            @RequestBody InscripcionModel inscripcion) {
         return ResponseEntity.ok(inscripcionService.actualizarInscripcion(id, inscripcion));
     }
 

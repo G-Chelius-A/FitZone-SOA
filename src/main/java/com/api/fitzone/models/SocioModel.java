@@ -22,44 +22,50 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name="socios")
+@Table(name = "socios")
 public class SocioModel {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_socio", nullable=false)
+    @Column(name = "id_socio", nullable = false)
     private Long id;
 
-    @Column(name="nombre", length=100, nullable=false)
-    @NotNull(message="Debe indicar su nombre")
+    @Column(name = "nombre", length = 100, nullable = false)
+    @NotNull(message = "Debe indicar su nombre")
     private String nombre;
 
-    @Email(message="Debe ingresar un email válido")
-    @NotNull(message="Debe ingresar un email")
-    @Column(name="email", nullable=false)
+    @Email(message = "Debe ingresar un email válido")
+    @NotNull(message = "Debe ingresar un email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name="telefono", nullable=false)
-    private Integer telefono;
+    @Column(name = "telefono", nullable = false)
+    private String telefono;
 
-    @Column(name="fecha_creacion", nullable=false, updatable=false)
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
-    @Column(name="vigencia_membresia")
+    @Column(name = "vigencia_membresia")
     private LocalDate vigenciaMembresia;
 
-    @JsonIgnore 
-    @OneToMany(mappedBy="socio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("socio")
     private List<InscripcionModel> inscripciones = new ArrayList<>();
 
+    // Si no se especifica la duración de la membresía, por defecto se le asigna 1
+    // año.
+
+    // NOTA: esto puede cambiarse posteriormente si se integra con otro sistema.
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         this.fechaCreacion = LocalDateTime.now();
-        if(vigenciaMembresia==null){
+        if (vigenciaMembresia == null) {
             this.vigenciaMembresia = LocalDate.now().plusYears(1);
         }
     }
+
+    // Getters, setters y constructores.
 
     public Long getId() {
         return id;
@@ -85,11 +91,11 @@ public class SocioModel {
         this.email = email;
     }
 
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
@@ -120,7 +126,7 @@ public class SocioModel {
     public SocioModel() {
     }
 
-    public SocioModel(Long id, String nombre, @Email String email, Integer telefono, LocalDateTime fechaCreacion,
+    public SocioModel(Long id, String nombre, @Email String email, String telefono, LocalDateTime fechaCreacion,
             LocalDate vigenciaMembresia, List<InscripcionModel> inscripciones) {
         this.id = id;
         this.nombre = nombre;
@@ -140,5 +146,4 @@ public class SocioModel {
         this.vigenciaMembresia = vigenciaMembresia;
     }
 
-    
 }

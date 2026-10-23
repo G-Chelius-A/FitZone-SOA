@@ -19,6 +19,9 @@ import com.api.fitzone.services.SocioService;
 
 import jakarta.validation.Valid;
 
+/*
+    RestController de los socios
+*/
 @RestController
 @RequestMapping("/api/socios")
 public class SocioController {

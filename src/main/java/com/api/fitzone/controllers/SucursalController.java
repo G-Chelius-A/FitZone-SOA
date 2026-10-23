@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.fitzone.models.SucursalModel;
 import com.api.fitzone.services.SucursalService;
 
+/*
+    RestController de las sucursales
+*/
 @RestController
 @RequestMapping("/api/sucursales")
 public class SucursalController {
@@ -43,7 +46,8 @@ public class SucursalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SucursalModel> actualizarSucursal(@PathVariable Long id, @RequestBody SucursalModel sucursal) {
+    public ResponseEntity<SucursalModel> actualizarSucursal(@PathVariable Long id,
+            @RequestBody SucursalModel sucursal) {
         return ResponseEntity.ok(sucursalService.actualizarSucursal(id, sucursal));
     }
 

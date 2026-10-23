@@ -40,20 +40,30 @@ public class InscripcionService {
     @Transactional 
     public InscripcionModel guardarInscripcion(InscripcionModel inscripcion){
 
+        // Validación de nulidad de datos de entrada
         if(inscripcion==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos vacíos o nulos");
         }
 
+        // Validación de relaciones obligatorias en la entidad
         if(inscripcion.getSocio()==null||inscripcion.getClase()==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Debes especificar el socio y la clase");
         }
 
+        // [SOA - Coordinación de Servicios Especializados]
+        // 1. Valida que el socio cuente con membresía activa y vigente
         sMembresia.validarMembresia(inscripcion.getSocio().getId());
+
+        // 2. Valida que la clase solicitada aún cuente con cupos disponibles
         sCupo.validarCupo(inscripcion.getClase().getId());
 
+        // Establecer estado activo por defecto y persistir la inscripción
         inscripcion.setActivo(true);
         InscripcionModel guardado = rInscripcion.save(inscripcion);
 
+        // [Arquitectura Orientada a Eventos / EDA]
+        // Publicación del evento de dominio 'InscritoEvent' tras registrar exitosamente.
+        // Los listeners suscritos (p. ej. registro en logs/notificación al usuario) procesarán este evento.
         eventPublisher.publishEvent(new InscritoEvent(guardado.getId(), guardado.getSocio().getId(), guardado.getClase().getId(), guardado.getFechaInscripcion(), guardado.getSocio().getEmail()));
 
         return guardado;

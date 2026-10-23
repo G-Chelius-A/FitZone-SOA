@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.api.fitzone.models.ClaseModel;
 
 @Repository
-public interface IClaseRepository extends JpaRepository<ClaseModel, Long>{
-    
+public interface IClaseRepository extends JpaRepository<ClaseModel, Long> {
+
 }

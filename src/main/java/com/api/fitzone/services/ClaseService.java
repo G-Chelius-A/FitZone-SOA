@@ -28,17 +28,20 @@ public class ClaseService {
         return rClase.findById(id);
     }
 
+    // Método que se utiliza para manejar la inscripción. Está detallado en las
+    // especificaciones del servicio y operaciones
     @Transactional
-    public ClaseModel guardarClase(ClaseModel clase) {
+    public ClaseModel inscribirEnClase(ClaseModel clase) {
         return rClase.save(clase);
     }
 
     @Transactional
     public ClaseModel actualizarClase(Long id, ClaseModel claseDetalles) {
         ClaseModel claseExistente = rClase.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la clase con id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se ha encontrado la clase con id: " + id));
 
-        if (claseDetalles.getCupo() != null && claseDetalles.getCupo()<=20 && claseDetalles.getCupo()>0) {
+        if (claseDetalles.getCupo() != null && claseDetalles.getCupo() <= 20 && claseDetalles.getCupo() > 0) {
             claseExistente.setCupo(claseDetalles.getCupo());
         }
         if (claseDetalles.getInstructor() != null) {
@@ -71,16 +74,20 @@ public class ClaseService {
         rClase.deleteById(id);
     }
 
+    // Método que se utiliza para calcular el recordatorio.
+    // Como se ejecuta una vez a la semana, lo mejor es calcular
+    // cuántas semanas pasaron desde hoy hasta el próximo día de la semana indicado.
+    // Luego se le restan 2 horas para tener el recordatorio.
+
     public LocalDateTime calcularRecordatorio(ClaseModel clase) {
 
         LocalDateTime ahora = LocalDateTime.now();
 
         LocalDate fecha = LocalDate.now()
-            .with(java.time.temporal.TemporalAdjusters
-                .nextOrSame(clase.getDia()));
+                .with(java.time.temporal.TemporalAdjusters
+                        .nextOrSame(clase.getDia()));
 
-        LocalDateTime fechaClase =
-            fecha.atTime(clase.getInicio());
+        LocalDateTime fechaClase = fecha.atTime(clase.getInicio());
 
         if (!fechaClase.minusHours(2).isAfter(ahora)) {
             fecha = fecha.plusWeeks(1);

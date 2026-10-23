@@ -11,53 +11,63 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="clases")
+@Table(name = "clases")
 public class ClaseModel {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id_clase", nullable=false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_clase", nullable = false)
     private Long id;
 
-    @Column(name="cupo", nullable=false)
+    @Column(name = "cupo", nullable = false)
     private Integer cupo;
 
-    @Column(name="instructor", nullable=false)
+    @Column(name = "instructor", nullable = false)
     private String instructor;
 
-    @Column(name="tipo", nullable=false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", nullable = false)
     private Tipo tipo;
 
-    @Column(name="hora_inicio", nullable=false)
+    @Column(name = "hora_inicio", nullable = false)
     private LocalTime inicio;
 
-    @Column(name="hora_fin", nullable=false)
+    @Column(name = "hora_fin", nullable = false)
     private LocalTime fin;
 
-    @Column(name="dia_semana", nullable=false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dia_semana", nullable = false)
     private DayOfWeek dia;
 
-    @Column(name="sucursal", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_sucursal", nullable = false)
+    @JsonIgnoreProperties("clases")
     private SucursalModel sucursal;
 
-    @JsonIgnore 
-    @OneToMany(mappedBy="clase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("clase")
     private List<InscripcionModel> inscripciones = new ArrayList<>();
 
-    public enum Tipo{
+    // Sólo se admiten estos tipos de clases: YOGA, SPINNING y FUNCIONAL
+    public enum Tipo {
         YOGA,
         SPINNING,
         FUNCIONAL
     }
+    // Getters, setters y constructores
 
     public Long getId() {
         return id;

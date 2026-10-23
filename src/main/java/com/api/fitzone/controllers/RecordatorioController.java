@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.fitzone.models.RecordatorioModel;
 import com.api.fitzone.services.RecordatorioService;
 
+/*
+    RestController de los recordatorios
+*/
 @RestController
 @RequestMapping("/api/recordatorios")
 public class RecordatorioController {

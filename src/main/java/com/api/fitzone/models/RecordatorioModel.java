@@ -16,33 +16,36 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="recordatorios")
+@Table(name = "recordatorios")
 public class RecordatorioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_recordatorio")
+    @Column(name = "id_recordatorio")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_inscripcion", nullable=false)
+    @JoinColumn(name = "id_inscripcion", nullable = false)
     @JsonIgnoreProperties("recordatorios")
     private InscripcionModel inscripcion;
 
-    @Column(name="mensaje", nullable=false)
+    @Column(name = "mensaje", nullable = false)
     private String mensaje;
 
-    @Column(name="fecha", nullable=false)
+    @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha;
 
-    @Column(name="enviado", nullable=false)
+    @Column(name = "enviado", nullable = false)
     private Boolean enviado;
 
+    // Al crear, la fecha de recordatorio será en 2 horas. También, el recordatorio
+    // será falso momentáneamente
+
     @PrePersist
-    public void onCreate(){
-        if(this.fecha==null){
+    public void onCreate() {
+        if (this.fecha == null) {
             this.fecha = inscripcion.getFechaInscripcion().minusHours(2);
         }
-        if(this.enviado==null){
+        if (this.enviado == null) {
             this.enviado = false;
         }
     }
@@ -99,5 +102,4 @@ public class RecordatorioModel {
         this.enviado = enviado;
     }
 
-    
 }
